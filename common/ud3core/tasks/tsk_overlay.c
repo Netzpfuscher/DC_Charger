@@ -83,17 +83,17 @@ void init_telemetry(){
     tt.n.Vout.chart = 0;
     tt.n.Vout.gauge = 0;
     
-    tt.n.Iprim.name = "Amps";
-    tt.n.Iprim.value = 0;
-    tt.n.Iprim.min = 0;
-    tt.n.Iprim.max = 50;
-    tt.n.Iprim.offset = 0;
-    tt.n.Iprim.unit = TT_UNIT_A;
-    tt.n.Iprim.divider = 1000;
-    tt.n.Iprim.high_res = pdTRUE;
-    tt.n.Iprim.resend_time = TT_FAST;
-    tt.n.Iprim.chart = 1;
-    tt.n.Iprim.gauge = 1;
+    tt.n.Iout.name = "Amps";
+    tt.n.Iout.value = 0;
+    tt.n.Iout.min = 0;
+    tt.n.Iout.max = 50;
+    tt.n.Iout.offset = 0;
+    tt.n.Iout.unit = TT_UNIT_A;
+    tt.n.Iout.divider = 1000;
+    tt.n.Iout.high_res = pdTRUE;
+    tt.n.Iout.resend_time = TT_FAST;
+    tt.n.Iout.chart = 1;
+    tt.n.Iout.gauge = 1;
     
     tt.n.avg_power.name = "Power";
     tt.n.avg_power.value = 0;
@@ -111,7 +111,7 @@ void init_telemetry(){
     tt.n.temp1.min = 0;
     tt.n.temp1.offset = 0;
     tt.n.temp1.unit = TT_UNIT_C;
-    tt.n.temp1.divider = 1;
+    tt.n.temp1.divider = 10;
     tt.n.temp1.high_res = pdFALSE;
     tt.n.temp1.resend_time = TT_SLOW;
     tt.n.temp1.chart = 2;
@@ -177,55 +177,20 @@ void show_overlay_100ms(TERMINAL_HANDLE * handle){
 
     	uint8_t row_pos = 1;
     	uint8_t col_pos = 90;
-    	TERM_Box(handle, row_pos, col_pos, row_pos + 11, col_pos + 25);
+    	TERM_Box(handle, row_pos, col_pos, row_pos + 5, col_pos + 25);
     	TERM_setCursorPos(handle, row_pos + 1, col_pos + 1);
-    	ttprintf("Bus Voltage:       %4iV", tt.n.Vout.value);
+    	ttprintf("Bus Voltage:       %4iV", tt.n.Vout.value/1000);
 
     	TERM_setCursorPos(handle, row_pos + 2, col_pos + 1);
-    	ttprintf("Battery Voltage:   %4iV", 0);
+    	ttprintf("Temp:            %4i *C", tt.n.temp1.value / tt.n.temp1.divider);
 
-    	TERM_setCursorPos(handle, row_pos + 3, col_pos + 1);
-    	ttprintf("Temp 1:          %4i *C", tt.n.temp1.value);
-
-    	TERM_setCursorPos(handle, row_pos + 4, col_pos + 1);
-    	ttprintf("Temp 2:          %4i *C", 0);
-
-    	TERM_setCursorPos(handle, row_pos + 5, col_pos + 1);
-        ttprintf("Bus status: ");
-
-    	switch (tt.n.bus_status.value) {
-    	case BUS_READY:
-            ttprintf("       Ready");
-    		break;
-    	case BUS_CHARGING:
-            ttprintf("    Charging");
-    		break;
-    	case BUS_OFF:
-            ttprintf("         OFF");
-    		break;
-        case BUS_BATT_UV_FLT:
-            ttprintf("  Battery UV");
-    		break;
-        case BUS_TEMP1_FAULT:
-            ttprintf("  Temp fault");
-    		break;
-    	}
-
-    	TERM_setCursorPos(handle, row_pos + 6, col_pos + 1);
+     	TERM_setCursorPos(handle, row_pos + 3, col_pos + 1);
     	ttprintf("Average power:     %4iW", tt.n.avg_power.value);
 
-    	TERM_setCursorPos(handle, row_pos + 7, col_pos + 1);
-    	ttprintf("Average Current: %4i.%iA", 0 / 10, 0 % 10);
-
-    	TERM_setCursorPos(handle, row_pos + 8, col_pos + 1);
-    	ttprintf("Primary Current:   %4iA", 0);
-        
-        TERM_setCursorPos(handle, row_pos + 9, col_pos + 1);
-    	ttprintf("MIDI voices:         %1i/4", 0);
-        
-        TERM_setCursorPos(handle, row_pos + 10, col_pos + 1);
-        ttprintf("Fres:        no feedback");
-
+    	TERM_setCursorPos(handle, row_pos + 4, col_pos + 1);
+        ttprintf("Average Cur:         ");
+        TERM_setCursorPos(handle, row_pos + 4, col_pos + 1);
+    	ttprintf("Average Cur: %4i.%iA", tt.n.Iout.value/1000,tt.n.Iout.value%1000);
 
     	TERM_sendVT100Code(handle, _VT100_CURSOR_RESTORE_POSITION,0);
     	TERM_sendVT100Code(handle, _VT100_CURSOR_ENABLE,0);

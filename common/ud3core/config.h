@@ -17,7 +17,7 @@
     
     
 //MIN
-#define NUM_MIN_CON 4
+#define NUM_MIN_CON 2
 #define STREAMBUFFER_RX_SIZE    256     //bytes
 #define STREAMBUFFER_TX_SIZE    1024    //bytes  
     

@@ -123,6 +123,11 @@ enum color{
 const extern char TERM_startupText1[];
 const extern char TERM_startupText2[];
 const extern char TERM_startupText3[];
+const extern char TERM_startupText4[];
+const extern char TERM_startupText5[];
+const extern char TERM_startupText6[];
+const extern char TERM_startupText7[];
+const extern char TERM_startupText8[];
 #endif
 
 

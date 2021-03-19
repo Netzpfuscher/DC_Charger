@@ -62,12 +62,6 @@ TERMINAL_HANDLE null;
 TERMINAL_HANDLE * null_handle = &null;
 
 
-static const char * AC_on_off[] = {
-    "off",
-    "on"
-    
-};
-
 static const char * AC_con[] = {
     "info",
     "min",
@@ -86,70 +80,18 @@ static const char * AC_eeprom[] = {
 };
 
 static const char * AC_set_get[] = {
-    "attack",
-    "autotune_s",
     "baudrate",
-    "boff",
-    "bon",
     "charge_delay",
-    "ct1_burden",
-    "ct1_ratio",
-    "ct2_burden",
-    "ct2_current",
-    "ct2_offset",
-    "ct2_ratio",
-    "ct2_type",
-    "ct2_voltage",
-    "ct3_burden",
-    "ct3_ratio",
-    "d_calib",
-    "decay",
-    "display",
-    "ena_display",
-    "ena_ext_int",
+    "i_prim",
     "ivo_uart",
-    "lead_time",
-    "max_const_i",
-    "max_dc_curr",
-    "max_fault_i",
-    "max_qcw_current",
-    "max_qcw_duty",
-    "max_qcw_pw",
-    "max_tr_current",
-    "max_tr_duty",
-    "max_tr_prf",
-    "max_tr_pw",
-    "mch",
     "min_enable",
-    "min_tr_current",
-    "offtime",
-    "pid_curr_i",
-    "pid_curr_p",
-    "ps_scheme",
-    "pw",
-    "pwd",
-    "qcw_hold",
-    "qcw_max",
-    "qcw_offset",
-    "qcw_ramp",
-    "qcw_repeat",
-    "r_bus",
-    "release",
-    "sid_noise",
-    "spi_speed",
-    "start_cycles",
-    "start_freq",
-    "synth",
-    "synth_filter",
+    "nt_name",
     "temp1_max",
     "temp1_setpoint",
-    "temp2_max",
-    "transpose",
-    "tune_delay",
-    "tune_end",
-    "tune_pw",
-    "tune_start",
-    "ud_name",
+    "v_out",
+    "v_pid_d",
+    "v_pid_i",
+    "v_pid_p",
     "watchdog"
 };
 
@@ -266,7 +208,6 @@ void tsk_cli_Start(void) {
         TERM_addCommand(CMD_signals, "signals","For debugging",0,&TERM_cmdListHead);
         TERM_addCommandConstAC(CMD_con, "con","Prints the connections",AC_con,&TERM_cmdListHead);
         TERM_addCommandConstAC(CMD_alarms, "alarms","Alarms [get/roll/reset]",AC_alarms,&TERM_cmdListHead);
-        TERM_addCommandConstAC(CMD_bus, "bus","bus [on/off]",AC_on_off,&TERM_cmdListHead);
         TERM_addCommand(CMD_config_get, "config_get","Internal use",0,&TERM_cmdListHead);
         TERM_addCommand(CMD_features, "features","Get supported features",0,&TERM_cmdListHead);
         TERM_addCommandConstAC(CMD_eeprom, "eeprom","Save/Load config [load/save]",AC_eeprom,&TERM_cmdListHead);
@@ -309,7 +250,7 @@ void tsk_cli_Start(void) {
             xSemaphoreGive(min_port[0].term_block);
             
             min_handle[0] = TERM_createNewHandle(stream_printf,&min_port[0],pdTRUE,&TERM_cmdListHead,NULL,"Serial");
-            
+            start_overlay_task(min_handle[0]);
             xTaskCreate(tsk_cli_TaskProc, "UART-CLI", STACK_TERMINAL, min_handle[0], PRIO_TERMINAL, &UART_Terminal_TaskHandle);
         }
 

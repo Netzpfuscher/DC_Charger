@@ -229,6 +229,12 @@ void TERM_printBootMessage(TERMINAL_HANDLE * handle){
     ttprintfEcho("\r\n\n\n%s\r\n", TERM_startupText1);
     ttprintfEcho("%s\r\n", TERM_startupText2);
     ttprintfEcho("%s\r\n", TERM_startupText3);
+    ttprintfEcho("%s\r\n", TERM_startupText4);
+    ttprintfEcho("%s\r\n", TERM_startupText5);
+    ttprintfEcho("%s\r\n", TERM_startupText6);
+    ttprintfEcho("%s\r\n", TERM_startupText7);
+    ttprintfEcho("%s\r\n", TERM_startupText8);
+    
 }
 
 BaseType_t ptr_is_in_ram(void* ptr){
@@ -1036,7 +1042,14 @@ void TERM_removeProgramm(TERMINAL_HANDLE * handle){
 
 
 #ifdef TERM_ENABLE_STARTUP_TEXT
-const char TERM_startupText1[] = "  _   _   ___    ____    _____              _\r\n | | | | |   \\  |__ /   |_   _|  ___   ___ | |  __ _\r\n | |_| | | |) |  |_ \\     | |   / -_) (_-< | | / _` |";
-const char TERM_startupText2[] = "  \\___/  |___/  |___/     |_|   \\___| /__/ |_| \\__,_|\r\n";
-const char TERM_startupText3[] = "\tBuild: " __DATE__ " - " __TIME__ "\r\n";
+    
+    
+const char TERM_startupText1[] = " ______   ___  _______  ___        _______  _______  _     _  _______  ______";
+const char TERM_startupText2[] = "|      | |   ||       ||   |      |       ||       || | _ | ||       ||    _ |";
+const char TERM_startupText3[] = "|  _    ||   ||    ___||   | ____ |    _  ||   _   || || || ||    ___||   | ||";
+const char TERM_startupText4[] = "| | |   ||   ||   | __ |   ||____||   |_| ||  | |  ||       ||   |___ |   |_||_";
+const char TERM_startupText5[] = "| |_|   ||   ||   ||  ||   |      |    ___||  |_|  ||       ||    ___||    __  |";
+const char TERM_startupText6[] = "|       ||   ||   |_| ||   |      |   |    |       ||   _   ||   |___ |   |  | |";
+const char TERM_startupText7[] = "|______| |___||_______||___|      |___|    |_______||__| |__||_______||___|  |_|";
+const char TERM_startupText8[] = "\tBuild: " __DATE__ " - " __TIME__ "\r\n";
 #endif   

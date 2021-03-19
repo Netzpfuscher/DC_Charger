@@ -119,7 +119,7 @@ parameter_entry confparam[] = {
     ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"temp1_max"       , configuration.temp1_max       , 0      ,100    ,0      ,callback_TTupdateFunction   ,"Max temperature 1 [*C]")
     ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"temp1_setpoint"  , configuration.temp1_setpoint  , 0      ,100    ,0      ,NULL                        ,"Setpoint for fan [*C]")
     ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"charge_delay"    , configuration.chargedelay     , 1      ,60000  ,0      ,callback_ConfigFunction     ,"Delay for the charge relay [ms]")  
-    ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"ud_name"         , configuration.nt_name         , 0      ,0      ,0      ,NULL                        ,"Name of the power supply [15 chars]")
+    ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"nt_name"         , configuration.nt_name         , 0      ,0      ,0      ,NULL                        ,"Name of the power supply [15 chars]")
     ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"min_enable"      , configuration.minprot         , 0      ,1      ,0      ,NULL                        ,"Use MIN-Protocol")
     ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"baudrate"        , configuration.baudrate        , 1200   ,4000000,0      ,callback_baudrateFunction   ,"Serial baudrate")
     ADD_PARAM(PARAM_CONFIG  ,pdTRUE ,"ivo_uart"        , configuration.ivo_uart        , 0      ,11     ,0      ,callback_ivoUART            ,"[RX][TX] 0=not inverted 1=inverted")
@@ -549,27 +549,6 @@ uint8_t CMD_eeprom(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args) {
     return TERM_CMD_EXIT_SUCCESS;
 }
 
-/*****************************************************************************
-* Switches the bus on/off
-******************************************************************************/
-uint8_t CMD_bus(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args){
-    if(argCount==0 || strcmp(args[0], "-?") == 0){
-        ttprintf("Usage: bus [on|off]\r\n");
-        return TERM_CMD_EXIT_SUCCESS;
-    }
-
-	if(strcmp(args[0], "on") == 0){
-		bus_command = BUS_COMMAND_ON;
-		ttprintf("BUS ON\r\n");
-        return TERM_CMD_EXIT_SUCCESS;
-	}
-	if(strcmp(args[0], "off") == 0){
-		bus_command = BUS_COMMAND_OFF;
-		ttprintf("BUS OFF\r\n");
-        return TERM_CMD_EXIT_SUCCESS;
-	}
-    return TERM_CMD_EXIT_SUCCESS;
-}
 
 /*****************************************************************************
 * Loads the default parametes out of flash
@@ -672,8 +651,6 @@ uint8_t CMD_signals(TERMINAL_HANDLE * handle, uint8_t argCount, char ** args){
         ttprintf(" combined: ");
         send_signal_state_new(system_fault_Read(),pdTRUE,handle);
         
-        ttprintf("Relay 1: ");
-        send_signal_state_wo_new(relay_read_bus(),pdFALSE,handle);
         ttprintf("Fan: ");
         send_signal_state_wo_new(Fan_Read(),pdFALSE,handle);
         ttprintf(" Temp 1: %i*C \r\n", tt.n.temp1.value);

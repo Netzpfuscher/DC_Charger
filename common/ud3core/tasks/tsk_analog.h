@@ -33,38 +33,6 @@
 #include <device.h>
 #include "cli_basic.h"
 
-#define CT_PRIMARY 0
-#define CT_SECONDARY 1
- 
-enum I2T {
-    I2T_NORMAL,
-    I2T_WARNING,
-    I2T_LIMIT
-};
-
-#define AC_PRECHARGE_TIMEOUT 100  //
-
-#define BAT_PRECHARGE_BUS_SCHEME   0   //battery "directly" supplies bus voltage
-#define BAT_BOOST_BUS_SCHEME       1   //battery is boosted via SLR converter
-#define AC_PRECHARGE_BUS_SCHEME    2   //no batteries, mains powered
-#define AC_DUAL_MEAS_SCHEME        3   //measures the input voltage and the capacitor voltage
-#define AC_NO_RELAY_BUS_SCHEME     4   //mains powered without a builtin precharging relay
-#define AC_PRECHARGE_FIXED_DELAY   5
-
-#define RELAY_CHARGE 1
-#define RELAY_OFF 0
-#define RELAY_CHARGE_OFF 2
-#define RELAY_ON 3
-
-#define BUS_COMMAND_OFF 0
-#define BUS_COMMAND_ON 1
-#define BUS_COMMAND_FAULT 2
-
-#define relay_write_bus(val) Relay1_Write(val)
-#define relay_write_charge_end(val) Relay2_Write(val)
-
-#define relay_read_bus(val) Relay1_Read()
-#define relay_read_charge_end(val) Relay2_Read()
 
 volatile uint8 bus_command;
 
@@ -75,25 +43,17 @@ extern uint16_t vdriver_lut[9];
 
 typedef struct
 {
-	uint16_t v_bus;
-	uint16_t v_batt;
-    uint16_t i_bus;
-    uint16_t v_driver;
+	int16_t v_out_raw;
+	int16_t i_out_raw;
 } adc_sample_t;
 
 
 /* `#END` */
 
 void tsk_analog_Start(void);
-uint32_t CT1_Get_Current(uint8_t channel);
-float CT1_Get_Current_f(uint8_t channel);
-uint16_t get_max(void);
-void i2t_set_limit(uint32_t const_current, uint32_t ovr_current, uint32_t limit_ms);
-void i2t_set_warning(uint8_t percent);
-void i2t_reset();
-void reconfig_charge_timer();
+
 uint8_t callback_pid(parameter_entry * params, uint8_t index, TERMINAL_HANDLE * handle);
-extern adc_sample_t *ADC_active_sample_buf;
+
 /*
  * Add user function prototypes in the below merge region to add user
  * functionality to the task definition.

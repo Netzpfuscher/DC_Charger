@@ -62,7 +62,7 @@ typedef struct __tele__ {
 
 typedef struct __tele_human__ {
     TELE Vout;
-    TELE Iprim;
+    TELE Iout;
     TELE temp1;
     TELE bus_status;
     TELE avg_power;
